@@ -24,9 +24,9 @@
     --red: #ff4545;
     --blue: #4da6ff;
   }
-
+ 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   body {
     background: var(--dark);
     color: var(--text);
@@ -35,7 +35,7 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
-
+ 
   /* GRID BG */
   body::before {
     content: '';
@@ -48,7 +48,7 @@
     pointer-events: none;
     z-index: 0;
   }
-
+ 
   .container {
     position: relative;
     z-index: 1;
@@ -56,14 +56,14 @@
     margin: 0 auto;
     padding: 0 1rem 4rem;
   }
-
+ 
   /* HEADER */
   header {
     padding: 3rem 0 2rem;
     border-bottom: 1px solid var(--border);
     margin-bottom: 2.5rem;
   }
-
+ 
   .header-top {
     display: flex;
     align-items: flex-start;
@@ -71,7 +71,7 @@
     gap: 1rem;
     flex-wrap: wrap;
   }
-
+ 
   .header-title h1 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(48px, 8vw, 80px);
@@ -79,9 +79,9 @@
     line-height: 1;
     color: #fff;
   }
-
+ 
   .header-title h1 span { color: var(--green); }
-
+ 
   .header-title p {
     font-size: 13px;
     color: var(--text-muted);
@@ -90,14 +90,14 @@
     letter-spacing: 1px;
     text-transform: uppercase;
   }
-
+ 
   .header-meta {
     display: flex;
     flex-direction: column;
     gap: 6px;
     align-items: flex-end;
   }
-
+ 
   .pill {
     display: inline-flex;
     align-items: center;
@@ -110,7 +110,7 @@
     color: var(--text-muted);
     white-space: nowrap;
   }
-
+ 
   .pill.live { border-color: var(--green); color: var(--green); }
   .pill.live::before {
     content: '';
@@ -120,24 +120,24 @@
     border-radius: 50%;
     animation: pulse 1.4s infinite;
   }
-
+ 
   @keyframes pulse {
     0%,100% { opacity: 1; }
     50% { opacity: 0.2; }
   }
-
+ 
   /* SECTION */
   .section {
     margin-bottom: 2.5rem;
   }
-
+ 
   .section-header {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 1rem;
   }
-
+ 
   .section-label {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
@@ -145,20 +145,20 @@
     letter-spacing: 2px;
     text-transform: uppercase;
   }
-
+ 
   .section-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 28px;
     letter-spacing: 1px;
     color: #fff;
   }
-
+ 
   /* STANDINGS */
   .standings-grid {
     display: grid;
     gap: 10px;
   }
-
+ 
   .standing-row {
     background: var(--dark2);
     border: 1px solid var(--border);
@@ -170,12 +170,12 @@
     gap: 8px;
     transition: border-color 0.2s;
   }
-
+ 
   .standing-row:hover { border-color: var(--border-bright); }
-
+ 
   .standing-row.first { border-color: rgba(255,215,0,0.3); }
   .standing-row.second { border-color: rgba(192,192,192,0.2); }
-
+ 
   .pos-badge {
     width: 28px;
     height: 28px;
@@ -186,16 +186,16 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: 15px;
   }
-
+ 
   .pos-badge.p1 { background: rgba(255,215,0,0.15); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
   .pos-badge.p2 { background: rgba(192,192,192,0.1); color: var(--silver); border: 1px solid rgba(192,192,192,0.2); }
   .pos-badge.p3 { background: rgba(205,127,50,0.1); color: var(--bronze); border: 1px solid rgba(205,127,50,0.2); }
-
+ 
   .player-name {
     font-weight: 500;
     font-size: 15px;
   }
-
+ 
   .player-avatar {
     width: 32px;
     height: 32px;
@@ -208,29 +208,29 @@
     margin-right: 8px;
     flex-shrink: 0;
   }
-
+ 
   .avatar-a { background: rgba(0,255,135,0.15); color: var(--green); border: 1px solid rgba(0,255,135,0.3); }
   .avatar-b { background: rgba(77,166,255,0.15); color: var(--blue); border: 1px solid rgba(77,166,255,0.3); }
   .avatar-c { background: rgba(255,69,69,0.15); color: var(--red); border: 1px solid rgba(255,69,69,0.3); }
-
+ 
   .player-cell { display: flex; align-items: center; }
-
+ 
   .stat-cell {
     text-align: center;
     font-family: 'DM Mono', monospace;
     font-size: 13px;
     color: var(--text-muted);
   }
-
+ 
   .stat-cell.pts {
     font-size: 16px;
     font-weight: 500;
     color: var(--green);
   }
-
+ 
   .stat-cell.gd.pos { color: var(--green); }
   .stat-cell.gd.neg { color: var(--red); }
-
+ 
   .standing-header {
     display: grid;
     grid-template-columns: 32px 1fr repeat(7, minmax(36px, 1fr));
@@ -238,7 +238,7 @@
     padding: 0 1.25rem;
     margin-bottom: 6px;
   }
-
+ 
   .standing-header span {
     font-size: 10px;
     font-family: 'DM Mono', monospace;
@@ -247,9 +247,9 @@
     letter-spacing: 1px;
     text-align: center;
   }
-
+ 
   .standing-header span:nth-child(2) { text-align: left; }
-
+ 
   .qualify-badge {
     font-size: 9px;
     font-family: 'DM Mono', monospace;
@@ -261,13 +261,13 @@
     border: 1px solid rgba(0,255,135,0.2);
     vertical-align: middle;
   }
-
+ 
   /* SCHEDULE TABLE */
   .matches-grid {
     display: grid;
     gap: 8px;
   }
-
+ 
   .match-card {
     background: var(--dark2);
     border: 1px solid var(--border);
@@ -279,18 +279,18 @@
     gap: 12px;
     transition: border-color 0.2s;
   }
-
+ 
   .match-card:hover { border-color: var(--border-bright); }
   .match-card.played { opacity: 0.7; }
   .match-card.upcoming { border-left: 3px solid var(--green); }
-
+ 
   .match-num {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     color: var(--text-dim);
     text-align: center;
   }
-
+ 
   .match-player {
     display: flex;
     align-items: center;
@@ -298,12 +298,12 @@
     font-weight: 500;
     font-size: 14px;
   }
-
+ 
   .match-player.right {
     justify-content: flex-end;
     flex-direction: row-reverse;
   }
-
+ 
   .match-score {
     text-align: center;
     font-family: 'Bebas Neue', sans-serif;
@@ -311,17 +311,17 @@
     letter-spacing: 3px;
     white-space: nowrap;
   }
-
+ 
   .match-score.pending {
     font-size: 14px;
     font-family: 'DM Mono', monospace;
     color: var(--text-dim);
     letter-spacing: 1px;
   }
-
+ 
   .match-score .score-num { color: #fff; }
   .match-score .score-sep { color: var(--text-dim); margin: 0 4px; }
-
+ 
   .match-winner-badge {
     font-size: 11px;
     font-family: 'DM Mono', monospace;
@@ -329,13 +329,13 @@
     border-radius: 4px;
     text-align: center;
   }
-
+ 
   .winner-a { background: rgba(0,255,135,0.1); color: var(--green); border: 1px solid rgba(0,255,135,0.2); }
   .winner-b { background: rgba(77,166,255,0.1); color: var(--blue); border: 1px solid rgba(77,166,255,0.2); }
   .winner-c { background: rgba(255,69,69,0.1); color: var(--red); border: 1px solid rgba(255,69,69,0.2); }
   .winner-draw { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
   .winner-pending { color: var(--text-dim); font-size: 11px; font-family: 'DM Mono', monospace; }
-
+ 
   .match-group-label {
     font-family: 'DM Mono', monospace;
     font-size: 10px;
@@ -344,7 +344,7 @@
     text-transform: uppercase;
     padding: 1rem 0 .4rem;
   }
-
+ 
   /* INPUT SECTION */
   .input-panel {
     background: var(--dark2);
@@ -352,7 +352,7 @@
     border-radius: 12px;
     padding: 1.5rem;
   }
-
+ 
   .input-row {
     display: grid;
     grid-template-columns: 64px 1fr 52px 20px 52px 1fr;
@@ -361,15 +361,15 @@
     padding: .5rem 0;
     border-bottom: 1px solid var(--border);
   }
-
+ 
   .input-row:last-of-type { border-bottom: none; }
-
+ 
   .input-label {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     color: var(--text-dim);
   }
-
+ 
   .input-player {
     font-weight: 500;
     font-size: 13px;
@@ -377,7 +377,7 @@
     align-items: center;
     gap: 6px;
   }
-
+ 
   .score-input {
     width: 100%;
     height: 36px;
@@ -391,16 +391,16 @@
     outline: none;
     transition: border-color 0.2s;
   }
-
+ 
   .score-input:focus { border-color: var(--green); }
-
+ 
   .score-vs {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     color: var(--text-dim);
     text-align: center;
   }
-
+ 
   .btn {
     padding: 8px 16px;
     border-radius: 6px;
@@ -411,39 +411,39 @@
     font-weight: 500;
     transition: all 0.15s;
   }
-
+ 
   .btn:active { transform: scale(0.97); }
-
+ 
   .btn-green {
     background: var(--green);
     color: #000;
   }
-
+ 
   .btn-green:hover { background: var(--green-dim); }
-
+ 
   .btn-outline {
     background: transparent;
     border: 1px solid var(--border);
     color: var(--text-muted);
   }
-
+ 
   .btn-outline:hover { border-color: var(--text-muted); color: var(--text); }
-
+ 
   .btn-danger {
     background: transparent;
     border: 1px solid rgba(255,69,69,0.3);
     color: var(--red);
   }
-
+ 
   .btn-danger:hover { background: rgba(255,69,69,0.1); }
-
+ 
   .input-actions {
     display: flex;
     gap: 8px;
     margin-top: 1rem;
     flex-wrap: wrap;
   }
-
+ 
   /* GRAND FINAL */
   .final-bracket {
     background: var(--dark2);
@@ -451,7 +451,7 @@
     border-radius: 12px;
     overflow: hidden;
   }
-
+ 
   .final-header {
     background: rgba(255,215,0,0.05);
     border-bottom: 1px solid rgba(255,215,0,0.15);
@@ -460,14 +460,14 @@
     align-items: center;
     justify-content: space-between;
   }
-
+ 
   .final-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
     color: var(--gold);
     letter-spacing: 1px;
   }
-
+ 
   .final-finalists {
     display: flex;
     align-items: center;
@@ -475,7 +475,7 @@
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid var(--border);
   }
-
+ 
   .finalist-chip {
     display: flex;
     align-items: center;
@@ -486,19 +486,19 @@
     font-size: 14px;
     border: 1px solid var(--border);
   }
-
+ 
   .finalist-vs {
     font-family: 'DM Mono', monospace;
     font-size: 11px;
     color: var(--text-dim);
   }
-
+ 
   .final-matches {
     padding: 1rem 1.5rem;
     display: grid;
     gap: 8px;
   }
-
+ 
   .final-match-row {
     display: grid;
     grid-template-columns: 60px 1fr 80px 80px;
@@ -509,22 +509,22 @@
     background: var(--dark3);
     border: 1px solid var(--border);
   }
-
+ 
   .series-dots {
     display: flex;
     gap: 4px;
   }
-
+ 
   .series-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     border: 1px solid var(--border);
   }
-
+ 
   .series-dot.won-a { background: var(--green); border-color: var(--green); }
   .series-dot.won-b { background: var(--blue); border-color: var(--blue); }
-
+ 
   .champion-banner {
     margin: 1rem 1.5rem;
     padding: 1rem 1.25rem;
@@ -535,28 +535,28 @@
     align-items: center;
     gap: 12px;
   }
-
+ 
   .trophy { font-size: 28px; }
-
+ 
   .champion-text h3 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
     color: var(--gold);
     letter-spacing: 1px;
   }
-
+ 
   .champion-text p {
     font-size: 12px;
     color: var(--text-muted);
     font-family: 'DM Mono', monospace;
   }
-
+ 
   /* TIEBREAKER */
   .tiebreaker-flow {
     display: grid;
     gap: 6px;
   }
-
+ 
   .tb-step {
     display: grid;
     grid-template-columns: 32px 1fr;
@@ -567,7 +567,7 @@
     border-radius: 8px;
     padding: .75rem 1rem;
   }
-
+ 
   .tb-num {
     width: 28px;
     height: 28px;
@@ -581,20 +581,20 @@
     color: var(--green);
     flex-shrink: 0;
   }
-
+ 
   .tb-content strong {
     display: block;
     font-size: 13px;
     margin-bottom: 3px;
     color: #fff;
   }
-
+ 
   .tb-content p {
     font-size: 12px;
     color: var(--text-muted);
     line-height: 1.5;
   }
-
+ 
   /* FORMULAS */
   .formula-card {
     background: var(--dark2);
@@ -603,7 +603,7 @@
     padding: 1rem 1.25rem;
     margin-bottom: 8px;
   }
-
+ 
   .formula-title {
     font-size: 12px;
     color: var(--text-muted);
@@ -612,7 +612,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
   }
-
+ 
   .formula-code {
     font-family: 'DM Mono', monospace;
     font-size: 12px;
@@ -623,21 +623,21 @@
     word-break: break-all;
     line-height: 1.6;
   }
-
+ 
   /* SETTINGS */
   .settings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 10px;
   }
-
+ 
   .setting-card {
     background: var(--dark2);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: .75rem 1rem;
   }
-
+ 
   .setting-key {
     font-size: 11px;
     font-family: 'DM Mono', monospace;
@@ -646,13 +646,13 @@
     letter-spacing: 1px;
     margin-bottom: 4px;
   }
-
+ 
   .setting-val {
     font-size: 14px;
     font-weight: 500;
     color: var(--text);
   }
-
+ 
   /* TOAST */
   .toast {
     position: fixed;
@@ -671,12 +671,12 @@
     transition: all 0.3s;
     pointer-events: none;
   }
-
+ 
   .toast.show {
     opacity: 1;
     transform: translateY(0);
   }
-
+ 
   /* TABS */
   .tabs {
     display: flex;
@@ -688,7 +688,7 @@
     padding: 4px;
     flex-wrap: wrap;
   }
-
+ 
   .tab-btn {
     padding: 7px 16px;
     border: none;
@@ -701,21 +701,21 @@
     font-weight: 500;
     transition: all 0.15s;
   }
-
+ 
   .tab-btn.active {
     background: var(--dark4);
     color: var(--green);
     border: 1px solid var(--border-bright);
   }
-
+ 
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
-
+ 
   /* PROGRESS BAR */
   .progress-wrap {
     margin-bottom: 2rem;
   }
-
+ 
   .progress-labels {
     display: flex;
     justify-content: space-between;
@@ -724,21 +724,21 @@
     font-size: 11px;
     color: var(--text-dim);
   }
-
+ 
   .progress-bar {
     height: 4px;
     background: var(--dark3);
     border-radius: 2px;
     overflow: hidden;
   }
-
+ 
   .progress-fill {
     height: 100%;
     background: var(--green);
     border-radius: 2px;
     transition: width 0.5s ease;
   }
-
+ 
   /* RESET CONFIRM */
   .confirm-overlay {
     display: none;
@@ -749,9 +749,9 @@
     align-items: center;
     justify-content: center;
   }
-
+ 
   .confirm-overlay.show { display: flex; }
-
+ 
   .confirm-box {
     background: var(--dark2);
     border: 1px solid var(--red);
@@ -761,11 +761,11 @@
     width: 90%;
     text-align: center;
   }
-
+ 
   .confirm-box h3 { font-size: 18px; margin-bottom: .5rem; }
   .confirm-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; }
   .confirm-box .actions { display: flex; gap: 8px; justify-content: center; }
-
+ 
   @media (max-width: 600px) {
     .match-card { grid-template-columns: 36px 1fr auto 1fr; }
     .match-card .match-winner-badge { display: none; }
@@ -778,9 +778,9 @@
 </style>
 </head>
 <body>
-
+ 
 <div class="container">
-
+ 
   <header>
     <div class="header-top">
       <div class="header-title">
@@ -802,7 +802,7 @@
       </div>
     </div>
   </header>
-
+ 
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('standings')">Standings</button>
     <button class="tab-btn" onclick="switchTab('matches')">Matches</button>
@@ -810,7 +810,7 @@
     <button class="tab-btn" onclick="switchTab('final')">Grand Final</button>
     <button class="tab-btn" onclick="switchTab('rules')">Rules & Formulas</button>
   </div>
-
+ 
   <!-- STANDINGS TAB -->
   <div class="tab-panel active" id="tab-standings">
     <div class="section">
@@ -818,7 +818,7 @@
         <span class="section-label">Live</span>
         <span class="section-title">Standings</span>
       </div>
-
+ 
       <div class="standing-header">
         <span>#</span>
         <span>Player</span>
@@ -831,13 +831,13 @@
         <span>GD</span>
         <span>PTS</span>
       </div>
-
+ 
       <div class="standings-grid" id="standings-grid">
         <!-- Rendered by JS -->
       </div>
     </div>
   </div>
-
+ 
   <!-- MATCHES TAB -->
   <div class="tab-panel" id="tab-matches">
     <div class="section">
@@ -848,7 +848,7 @@
       <div class="matches-grid" id="matches-grid"></div>
     </div>
   </div>
-
+ 
   <!-- ENTRY TAB -->
   <div class="tab-panel" id="tab-entry">
     <div class="section">
@@ -859,7 +859,7 @@
       <div class="input-panel" id="entry-panel"></div>
     </div>
   </div>
-
+ 
   <!-- GRAND FINAL TAB -->
   <div class="tab-panel" id="tab-final">
     <div class="section">
@@ -870,7 +870,7 @@
       <div id="final-section"></div>
     </div>
   </div>
-
+ 
   <!-- RULES TAB -->
   <div class="tab-panel" id="tab-rules">
     <div class="section">
@@ -890,7 +890,7 @@
         <div class="setting-card"><div class="setting-key">Loss</div><div class="setting-val" style="color:var(--red)">0 pts</div></div>
       </div>
     </div>
-
+ 
     <div class="section">
       <div class="section-header">
         <span class="section-label">Logic</span>
@@ -934,7 +934,7 @@
         </div>
       </div>
     </div>
-
+ 
     <div class="section">
       <div class="section-header">
         <span class="section-label">Google Sheets</span>
@@ -957,7 +957,7 @@
         <div class="formula-code">=IF(C2>D2,"Player A",IF(D2>C2,"Player B","Draw"))</div>
       </div>
     </div>
-
+ 
     <div class="section" style="margin-top:2rem">
       <div class="section-header">
         <span class="section-label">Danger Zone</span>
@@ -966,12 +966,12 @@
       <button class="btn btn-danger" onclick="confirmReset()">Reset All Results</button>
     </div>
   </div>
-
+ 
 </div>
-
+ 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
-
+ 
 <!-- Confirm Reset -->
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
@@ -983,7 +983,7 @@
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ============================================================
 // DATA
@@ -993,7 +993,7 @@ const PLAYERS = [
   { id: 'SA', name: 'saatvik_2010', avatarClass: 'avatar-b', chipClass: 'winner-b', colorVar: 'var(--blue)' },
   { id: 'SU', name: 'Switch_bot', avatarClass: 'avatar-c', chipClass: 'winner-c', colorVar: 'var(--red)' },
 ];
-
+ 
 const MATCH_SCHEDULE = [
   { id: 1, p1: 'Ris', p2: 'SA', group: 'Delulu_404 vs saatvik_2010' },
   { id: 2, p1: 'Ris', p2: 'SA', group: 'Delulu_404 vs saatvik_2010' },
@@ -1005,13 +1005,13 @@ const MATCH_SCHEDULE = [
   { id: 8, p1: 'SU', p2: 'Ris', group: 'Switch_bot vs Delulu_404' },
   { id: 9, p1: 'SU', p2: 'Ris', group: 'Switch_bot vs Delulu_404' },
 ];
-
+ 
 const FINAL_MATCHES = [
   { id: 'F1', label: 'Final M1' },
   { id: 'F2', label: 'Final M2' },
   { id: 'F3', label: 'Final M3' },
 ];
-
+ 
 // ============================================================
 // STATE
 // ============================================================
@@ -1025,26 +1025,26 @@ function loadState() {
     finalResults: {}, // 'F1'/'F2'/'F3' -> { s1, s2 }
   };
 }
-
+ 
 function saveState(state) {
   try {
     localStorage.setItem('fifa_tracker_v2', JSON.stringify(state));
   } catch(e) {}
 }
-
+ 
 let state = loadState();
-
+ 
 // ============================================================
 // COMPUTED
 // ============================================================
 function getPlayer(id) { return PLAYERS.find(p => p.id === id); }
-
+ 
 function computeStandings() {
   const stats = {};
   PLAYERS.forEach(p => {
     stats[p.id] = { mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
   });
-
+ 
   MATCH_SCHEDULE.forEach(m => {
     const r = state.results[m.id];
     if (!r) return;
@@ -1055,7 +1055,7 @@ function computeStandings() {
     else if (s2 > s1) { stats[m.p2].w++; stats[m.p2].pts += 3; stats[m.p1].l++; }
     else { stats[m.p1].d++; stats[m.p1].pts++; stats[m.p2].d++; stats[m.p2].pts++; }
   });
-
+ 
   return PLAYERS.map(p => ({ ...p, ...stats[p.id], gd: stats[p.id].gf - stats[p.id].ga }))
     .sort((a, b) => {
       if (b.pts !== a.pts) return b.pts - a.pts;
@@ -1064,15 +1064,15 @@ function computeStandings() {
       return 0;
     });
 }
-
+ 
 function playedCount() {
   return MATCH_SCHEDULE.filter(m => state.results[m.id] !== undefined).length;
 }
-
+ 
 function getFinalists(standings) {
   return [standings[0], standings[1]];
 }
-
+ 
 function computeFinalSeries(finalists) {
   if (!finalists[0] || !finalists[1]) return { winsA: 0, winsB: 0 };
   let winsA = 0, winsB = 0;
@@ -1084,7 +1084,7 @@ function computeFinalSeries(finalists) {
   });
   return { winsA, winsB };
 }
-
+ 
 // ============================================================
 // RENDER
 // ============================================================
@@ -1092,7 +1092,7 @@ function renderAll() {
   const standings = computeStandings();
   const played = playedCount();
   const pct = Math.round((played / 9) * 100);
-
+ 
   // Progress
   document.getElementById('match-progress-pill').textContent = `${played} / 9 Matches`;
   document.getElementById('progress-fill').style.width = pct + '%';
@@ -1100,18 +1100,18 @@ function renderAll() {
   if (played === 9) {
     document.getElementById('live-status').textContent = 'Group Stage Complete';
   }
-
+ 
   renderStandings(standings);
   renderMatches();
   renderEntry();
   renderFinal(standings);
 }
-
+ 
 function renderStandings(standings) {
   const grid = document.getElementById('standings-grid');
   const posClasses = ['p1', 'p2', 'p3'];
   const rowClasses = ['first', 'second', ''];
-
+ 
   grid.innerHTML = standings.map((p, i) => {
     const gdClass = p.gd > 0 ? 'pos' : p.gd < 0 ? 'neg' : '';
     const gdStr = p.gd > 0 ? `+${p.gd}` : `${p.gd}`;
@@ -1134,23 +1134,23 @@ function renderStandings(standings) {
       </div>`;
   }).join('');
 }
-
+ 
 function renderMatches() {
   const grid = document.getElementById('matches-grid');
   let currentGroup = '';
   let html = '';
-
+ 
   MATCH_SCHEDULE.forEach(m => {
     const r = state.results[m.id];
     const p1 = getPlayer(m.p1);
     const p2 = getPlayer(m.p2);
     const played = r !== undefined;
-
+ 
     if (m.group !== currentGroup) {
       currentGroup = m.group;
       html += `<div class="match-group-label">${m.group}</div>`;
     }
-
+ 
     let scoreHtml, winnerHtml;
     if (played) {
       const w = r.s1 > r.s2 ? p1 : r.s2 > r.s1 ? p2 : null;
@@ -1162,7 +1162,7 @@ function renderMatches() {
       scoreHtml = `<div class="match-score pending">vs</div>`;
       winnerHtml = `<span class="winner-pending">—</span>`;
     }
-
+ 
     html += `
       <div class="match-card ${played ? 'played' : 'upcoming'}">
         <div class="match-num">M${m.id}</div>
@@ -1178,27 +1178,27 @@ function renderMatches() {
         ${winnerHtml}
       </div>`;
   });
-
+ 
   grid.innerHTML = html;
 }
-
+ 
 function renderEntry() {
   const panel = document.getElementById('entry-panel');
   let html = '';
   let currentGroup = '';
-
+ 
   MATCH_SCHEDULE.forEach(m => {
     const r = state.results[m.id];
     const p1 = getPlayer(m.p1);
     const p2 = getPlayer(m.p2);
     const v1 = r !== undefined ? r.s1 : '';
     const v2 = r !== undefined ? r.s2 : '';
-
+ 
     if (m.group !== currentGroup) {
       currentGroup = m.group;
       html += `<div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--green);letter-spacing:2px;text-transform:uppercase;padding:.75rem 0 .25rem;">${m.group}</div>`;
     }
-
+ 
     html += `
       <div class="input-row">
         <div class="input-label">M${m.id}</div>
@@ -1215,19 +1215,19 @@ function renderEntry() {
         </div>
       </div>`;
   });
-
+ 
   html += `<div class="input-actions">
     <button class="btn btn-green" onclick="saveAllScores()">Save All Results</button>
     <button class="btn btn-outline" onclick="clearUnplayed()">Clear Unplayed</button>
   </div>`;
-
+ 
   panel.innerHTML = html;
 }
-
+ 
 function renderFinal(standings) {
   const section = document.getElementById('final-section');
   const allPlayed = playedCount() === 9;
-
+ 
   if (!allPlayed) {
     section.innerHTML = `
       <div style="background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center;">
@@ -1237,13 +1237,13 @@ function renderFinal(standings) {
       </div>`;
     return;
   }
-
+ 
   const finalists = getFinalists(standings);
   const fA = finalists[0];
   const fB = finalists[1];
   const series = computeFinalSeries(finalists);
   const champion = series.winsA >= 2 ? fA : series.winsB >= 2 ? fB : null;
-
+ 
   let finalMatchesHtml = FINAL_MATCHES.map(fm => {
     const r = state.finalResults[fm.id];
     const played = r !== undefined;
@@ -1255,9 +1255,9 @@ function renderFinal(standings) {
       else if (r.s2 > r.s1) { winnerStr = fB.name; winnerClass = fB.chipClass; }
       else { winnerStr = 'Draw'; winnerClass = 'winner-draw'; }
     }
-
+ 
     const dot1 = series.winsA > 0 && (fm.id === 'F1' && r && r.s1 > r.s2) ? `<span class="series-dot won-a"></span>` : (fm.id === 'F2' && r && r.s1 > r.s2 ? `<span class="series-dot won-a"></span>` : (fm.id === 'F3' && r && r.s1 > r.s2 ? `<span class="series-dot won-a"></span>` : ''));
-
+ 
     return `
       <div class="final-match-row">
         <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim)">${fm.label}</div>
@@ -1268,7 +1268,7 @@ function renderFinal(standings) {
         </div>
       </div>`;
   }).join('');
-
+ 
   let finalEntryHtml = FINAL_MATCHES.map(fm => {
     const r = state.finalResults[fm.id];
     const v1 = r !== undefined ? r.s1 : '';
@@ -1282,7 +1282,7 @@ function renderFinal(standings) {
         <div class="input-player" style="justify-content:flex-end">${fB.name}<span class="player-avatar ${fB.avatarClass}" style="width:22px;height:22px;font-size:11px">${fB.id}</span></div>
       </div>`;
   }).join('');
-
+ 
   const championHtml = champion ? `
     <div class="champion-banner">
       <div class="trophy">🏆</div>
@@ -1291,7 +1291,7 @@ function renderFinal(standings) {
         <p>Won the Grand Final ${series.winsA >= 2 ? series.winsA + '–' + series.winsB : series.winsB + '–' + series.winsA}</p>
       </div>
     </div>` : '';
-
+ 
   section.innerHTML = `
     <div class="final-bracket">
       <div class="final-header">
@@ -1316,14 +1316,14 @@ function renderFinal(standings) {
       </div>
     </div>`;
 }
-
+ 
 // ============================================================
 // ACTIONS
 // ============================================================
 function onScoreChange(matchId) {
   // live preview — do nothing on each keystroke, save on btn
 }
-
+ 
 function saveAllScores() {
   let saved = 0;
   MATCH_SCHEDULE.forEach(m => {
@@ -1341,7 +1341,7 @@ function saveAllScores() {
   renderAll();
   showToast(`${saved} results saved`);
 }
-
+ 
 function clearUnplayed() {
   // clears only unplayed (no result yet) inputs
   MATCH_SCHEDULE.forEach(m => {
@@ -1354,7 +1354,7 @@ function clearUnplayed() {
   });
   showToast('Cleared unplayed inputs');
 }
-
+ 
 function saveFinalScores() {
   FINAL_MATCHES.forEach(fm => {
     const i1 = document.getElementById(`fs1_${fm.id}`);
@@ -1370,22 +1370,22 @@ function saveFinalScores() {
   renderAll();
   showToast('Final results saved');
 }
-
+ 
 function switchTab(name) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   event.target.classList.add('active');
   document.getElementById('tab-' + name).classList.add('active');
 }
-
+ 
 function confirmReset() {
   document.getElementById('confirm-overlay').classList.add('show');
 }
-
+ 
 function closeConfirm() {
   document.getElementById('confirm-overlay').classList.remove('show');
 }
-
+ 
 function doReset() {
   state = { results: {}, finalResults: {} };
   saveState(state);
@@ -1393,14 +1393,14 @@ function doReset() {
   renderAll();
   showToast('Tournament reset');
 }
-
+ 
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = '✓ ' + msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
-
+ 
 // ============================================================
 // INIT
 // ============================================================
