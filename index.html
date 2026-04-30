@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIFA Tournament Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00FF87;
+    --green-dim: #00cc6a;
+    --dark: #0a0a0a;
+    --dark2: #111111;
+    --dark3: #1a1a1a;
+    --dark4: #222222;
+    --border: rgba(255,255,255,0.08);
+    --border-bright: rgba(0,255,135,0.3);
+    --text: #e8e8e8;
+    --text-muted: #666;
+    --text-dim: #444;
+    --gold: #FFD700;
+    --silver: #C0C0C0;
+    --bronze: #CD7F32;
+    --red: #ff4545;
+    --blue: #4da6ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BG */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,135,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,135,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem 4rem;
+  }
+
+  /* HEADER */
+  header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .header-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 80px);
+    letter-spacing: 2px;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .header-title h1 span { color: var(--green); }
+
+  .header-title p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .pill.live { border-color: var(--green); color: var(--green); }
+  .pill.live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 1.4s infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+
+  /* STANDINGS */
+  .standings-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .standing-row {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: grid;
+    grid-template-columns: 32px 1fr repeat(7, minmax(36px, 1fr));
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .standing-row:hover { border-color: var(--border-bright); }
+
+  .standing-row.first { border-color: rgba(255,215,0,0.3); }
+  .standing-row.second { border-color: rgba(192,192,192,0.2); }
+
+  .pos-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+  }
+
+  .pos-badge.p1 { background: rgba(255,215,0,0.15); color: var(--gold); border: 1px solid rgba(255,215,0,0.3); }
+  .pos-badge.p2 { background: rgba(192,192,192,0.1); color: var(--silver); border: 1px solid rgba(192,192,192,0.2); }
+  .pos-badge.p3 { background: rgba(205,127,50,0.1); color: var(--bronze); border: 1px solid rgba(205,127,50,0.2); }
+
+  .player-name {
+    font-weight: 500;
+    font-size: 15px;
+  }
+
+  .player-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+
+  .avatar-a { background: rgba(0,255,135,0.15); color: var(--green); border: 1px solid rgba(0,255,135,0.3); }
+  .avatar-b { background: rgba(77,166,255,0.15); color: var(--blue); border: 1px solid rgba(77,166,255,0.3); }
+  .avatar-c { background: rgba(255,69,69,0.15); color: var(--red); border: 1px solid rgba(255,69,69,0.3); }
+
+  .player-cell { display: flex; align-items: center; }
+
+  .stat-cell {
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .stat-cell.pts {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  .stat-cell.gd.pos { color: var(--green); }
+  .stat-cell.gd.neg { color: var(--red); }
+
+  .standing-header {
+    display: grid;
+    grid-template-columns: 32px 1fr repeat(7, minmax(36px, 1fr));
+    gap: 8px;
+    padding: 0 1.25rem;
+    margin-bottom: 6px;
+  }
+
+  .standing-header span {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  .standing-header span:nth-child(2) { text-align: left; }
+
+  .qualify-badge {
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    background: rgba(0,255,135,0.1);
+    color: var(--green);
+    border: 1px solid rgba(0,255,135,0.2);
+    vertical-align: middle;
+  }
+
+  /* SCHEDULE TABLE */
+  .matches-grid {
+    display: grid;
+    gap: 8px;
+  }
+
+  .match-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1.25rem;
+    display: grid;
+    grid-template-columns: 48px 1fr auto 1fr 120px;
+    align-items: center;
+    gap: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .match-card:hover { border-color: var(--border-bright); }
+  .match-card.played { opacity: 0.7; }
+  .match-card.upcoming { border-left: 3px solid var(--green); }
+
+  .match-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  .match-player {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .match-player.right {
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+  }
+
+  .match-score {
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 3px;
+    white-space: nowrap;
+  }
+
+  .match-score.pending {
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+
+  .match-score .score-num { color: #fff; }
+  .match-score .score-sep { color: var(--text-dim); margin: 0 4px; }
+
+  .match-winner-badge {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .winner-a { background: rgba(0,255,135,0.1); color: var(--green); border: 1px solid rgba(0,255,135,0.2); }
+  .winner-b { background: rgba(77,166,255,0.1); color: var(--blue); border: 1px solid rgba(77,166,255,0.2); }
+  .winner-c { background: rgba(255,69,69,0.1); color: var(--red); border: 1px solid rgba(255,69,69,0.2); }
+  .winner-draw { background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid var(--border); }
+  .winner-pending { color: var(--text-dim); font-size: 11px; font-family: 'DM Mono', monospace; }
+
+  .match-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 1rem 0 .4rem;
+  }
+
+  /* INPUT SECTION */
+  .input-panel {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+
+  .input-row {
+    display: grid;
+    grid-template-columns: 64px 1fr auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: .5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .input-row:last-of-type { border-bottom: none; }
+
+  .input-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .input-player {
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .score-input {
+    width: 48px;
+    height: 36px;
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .score-input:focus { border-color: var(--green); }
+
+  .score-vs {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-green {
+    background: var(--green);
+    color: #000;
+  }
+
+  .btn-green:hover { background: var(--green-dim); }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .btn-outline:hover { border-color: var(--text-muted); color: var(--text); }
+
+  .btn-danger {
+    background: transparent;
+    border: 1px solid rgba(255,69,69,0.3);
+    color: var(--red);
+  }
+
+  .btn-danger:hover { background: rgba(255,69,69,0.1); }
+
+  .input-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* GRAND FINAL */
+  .final-bracket {
+    background: var(--dark2);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .final-header {
+    background: rgba(255,215,0,0.05);
+    border-bottom: 1px solid rgba(255,215,0,0.15);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .final-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  .final-finalists {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .finalist-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .finalist-vs {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .final-matches {
+    padding: 1rem 1.5rem;
+    display: grid;
+    gap: 8px;
+  }
+
+  .final-match-row {
+    display: grid;
+    grid-template-columns: 60px 1fr 80px 80px;
+    align-items: center;
+    gap: 12px;
+    padding: .6rem .75rem;
+    border-radius: 6px;
+    background: var(--dark3);
+    border: 1px solid var(--border);
+  }
+
+  .series-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .series-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+  }
+
+  .series-dot.won-a { background: var(--green); border-color: var(--green); }
+  .series-dot.won-b { background: var(--blue); border-color: var(--blue); }
+
+  .champion-banner {
+    margin: 1rem 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .trophy { font-size: 28px; }
+
+  .champion-text h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+
+  .champion-text p {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* TIEBREAKER */
+  .tiebreaker-flow {
+    display: grid;
+    gap: 6px;
+  }
+
+  .tb-step {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+  }
+
+  .tb-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+
+  .tb-content strong {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 3px;
+    color: #fff;
+  }
+
+  .tb-content p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* FORMULAS */
+  .formula-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 8px;
+  }
+
+  .formula-title {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .formula-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--green);
+    background: var(--dark3);
+    padding: 8px 12px;
+    border-radius: 6px;
+    word-break: break-all;
+    line-height: 1.6;
+  }
+
+  /* SETTINGS */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .setting-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+  }
+
+  .setting-key {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .setting-val {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--dark3);
+    border: 1px solid var(--border-bright);
+    border-radius: 8px;
+    padding: .75rem 1.25rem;
+    font-size: 13px;
+    color: var(--green);
+    font-family: 'DM Mono', monospace;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 1.5rem;
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 7px 16px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  .tab-btn.active {
+    background: var(--dark4);
+    color: var(--green);
+    border: 1px solid var(--border-bright);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    margin-bottom: 2rem;
+  }
+
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--dark3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* RESET CONFIRM */
+  .confirm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm-overlay.show { display: flex; }
+
+  .confirm-box {
+    background: var(--dark2);
+    border: 1px solid var(--red);
+    border-radius: 12px;
+    padding: 2rem;
+    max-width: 360px;
+    width: 90%;
+    text-align: center;
+  }
+
+  .confirm-box h3 { font-size: 18px; margin-bottom: .5rem; }
+  .confirm-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; }
+  .confirm-box .actions { display: flex; gap: 8px; justify-content: center; }
+
+  @media (max-width: 600px) {
+    .match-card { grid-template-columns: 36px 1fr auto 1fr; }
+    .match-card .match-winner-badge { display: none; }
+    .standing-row { grid-template-columns: 28px 1fr repeat(3, 1fr) 1fr; }
+    .standing-row .stat-mp, .standing-row .stat-w, .standing-row .stat-d, .standing-row .stat-l,
+    .standing-row .stat-gf, .standing-row .stat-ga { display: none; }
+    .standing-header .h-mp, .standing-header .h-w, .standing-header .h-d, .standing-header .h-l,
+    .standing-header .h-gf, .standing-header .h-ga { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="header-top">
+      <div class="header-title">
+        <h1>FIFA <span>Tournament</span></h1>
+        <p>Triple Round Robin · 3 Players · 9 Matches</p>
+      </div>
+      <div class="header-meta">
+        <span class="pill live" id="live-status">Tournament Active</span>
+        <span class="pill" id="match-progress-pill">0 / 9 Matches</span>
+      </div>
+    </div>
+    <div class="progress-wrap" style="margin-top:1.5rem;margin-bottom:0">
+      <div class="progress-labels">
+        <span>Match Progress</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('standings')">Standings</button>
+    <button class="tab-btn" onclick="switchTab('matches')">Matches</button>
+    <button class="tab-btn" onclick="switchTab('entry')">Enter Results</button>
+    <button class="tab-btn" onclick="switchTab('final')">Grand Final</button>
+    <button class="tab-btn" onclick="switchTab('rules')">Rules & Formulas</button>
+  </div>
+
+  <!-- STANDINGS TAB -->
+  <div class="tab-panel active" id="tab-standings">
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Live</span>
+        <span class="section-title">Standings</span>
+      </div>
+
+      <div class="standing-header">
+        <span>#</span>
+        <span>Player</span>
+        <span class="h-mp">MP</span>
+        <span class="h-w">W</span>
+        <span class="h-d">D</span>
+        <span class="h-l">L</span>
+        <span class="h-gf">GF</span>
+        <span class="h-ga">GA</span>
+        <span>GD</span>
+        <span>PTS</span>
+      </div>
+
+      <div class="standings-grid" id="standings-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MATCHES TAB -->
+  <div class="tab-panel" id="tab-matches">
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Schedule</span>
+        <span class="section-title">All Matches</span>
+      </div>
+      <div class="matches-grid" id="matches-grid"></div>
+    </div>
+  </div>
+
+  <!-- ENTRY TAB -->
+  <div class="tab-panel" id="tab-entry">
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Admin</span>
+        <span class="section-title">Enter Results</span>
+      </div>
+      <div class="input-panel" id="entry-panel"></div>
+    </div>
+  </div>
+
+  <!-- GRAND FINAL TAB -->
+  <div class="tab-panel" id="tab-final">
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Championship</span>
+        <span class="section-title">Grand Final</span>
+      </div>
+      <div id="final-section"></div>
+    </div>
+  </div>
+
+  <!-- RULES TAB -->
+  <div class="tab-panel" id="tab-rules">
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Config</span>
+        <span class="section-title">Match Settings</span>
+      </div>
+      <div class="settings-grid">
+        <div class="setting-card"><div class="setting-key">Format</div><div class="setting-val">Triple Round Robin</div></div>
+        <div class="setting-card"><div class="setting-key">Match Length</div><div class="setting-val">6 min/half</div></div>
+        <div class="setting-card"><div class="setting-key">Difficulty</div><div class="setting-val">World Class / Legendary</div></div>
+        <div class="setting-card"><div class="setting-key">Game Speed</div><div class="setting-val">Normal</div></div>
+        <div class="setting-card"><div class="setting-key">Injuries</div><div class="setting-val">Off</div></div>
+        <div class="setting-card"><div class="setting-key">Handball</div><div class="setting-val">Off</div></div>
+        <div class="setting-card"><div class="setting-key">Win</div><div class="setting-val" style="color:var(--green)">3 pts</div></div>
+        <div class="setting-card"><div class="setting-key">Draw</div><div class="setting-val">1 pt</div></div>
+        <div class="setting-card"><div class="setting-key">Loss</div><div class="setting-val" style="color:var(--red)">0 pts</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Logic</span>
+        <span class="section-title">Tiebreaker Order</span>
+      </div>
+      <div class="tiebreaker-flow">
+        <div class="tb-step">
+          <div class="tb-num">1</div>
+          <div class="tb-content">
+            <strong>Goal Difference (GD)</strong>
+            <p>Compare GF − GA across all group matches. Higher GD wins.</p>
+          </div>
+        </div>
+        <div class="tb-step">
+          <div class="tb-num">2</div>
+          <div class="tb-content">
+            <strong>Goals Scored (GF)</strong>
+            <p>If GD is equal, player with more total goals scored advances.</p>
+          </div>
+        </div>
+        <div class="tb-step">
+          <div class="tb-num">3</div>
+          <div class="tb-content">
+            <strong>Head-to-Head Record</strong>
+            <p>Points earned in matches directly between the tied players only.</p>
+          </div>
+        </div>
+        <div class="tb-step">
+          <div class="tb-num">4</div>
+          <div class="tb-content">
+            <strong>Head-to-Head Goal Difference</strong>
+            <p>GD from the head-to-head matches between the tied players only.</p>
+          </div>
+        </div>
+        <div class="tb-step">
+          <div class="tb-num">5</div>
+          <div class="tb-content">
+            <strong>One-Match Playoff</strong>
+            <p>If all above are equal, a single extra match is played immediately to decide qualification.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <span class="section-label">Google Sheets</span>
+        <span class="section-title">Formulas</span>
+      </div>
+      <div class="formula-card">
+        <div class="formula-title">Points (row 2, results in cols C/D/E = W/D/L counts)</div>
+        <div class="formula-code">=(C2*3)+(D2*1)+(E2*0)</div>
+      </div>
+      <div class="formula-card">
+        <div class="formula-title">Goal Difference (GF in col F, GA in col G)</div>
+        <div class="formula-code">=F2-G2</div>
+      </div>
+      <div class="formula-card">
+        <div class="formula-title">Rank by Points then GD (players in I2:I4, pts in J2:J4, GD in K2:K4)</div>
+        <div class="formula-code">=RANK(J2,J$2:J$4,0)+SUMPRODUCT((J$2:J$4=J2)*(K$2:K$4>K2))</div>
+      </div>
+      <div class="formula-card">
+        <div class="formula-title">Auto-winner (score A in col C, score B in col D)</div>
+        <div class="formula-code">=IF(C2>D2,"Player A",IF(D2>C2,"Player B","Draw"))</div>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:2rem">
+      <div class="section-header">
+        <span class="section-label">Danger Zone</span>
+        <span class="section-title">Reset</span>
+      </div>
+      <button class="btn btn-danger" onclick="confirmReset()">Reset All Results</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Confirm Reset -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3>Reset Tournament?</h3>
+    <p>This will clear all match results and return everything to zero. This cannot be undone.</p>
+    <div class="actions">
+      <button class="btn btn-outline" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" onclick="doReset()">Yes, Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const PLAYERS = [
+  { id: 'Ris', name: 'Delulu_404', avatarClass: 'avatar-a', chipClass: 'winner-a', colorVar: 'var(--green)' },
+  { id: 'SA', name: 'saatvik_2010', avatarClass: 'avatar-b', chipClass: 'winner-b', colorVar: 'var(--blue)' },
+  { id: 'SU', name: 'Switch_bot', avatarClass: 'avatar-c', chipClass: 'winner-c', colorVar: 'var(--red)' },
+];
+
+const MATCH_SCHEDULE = [
+  { id: 1, p1: 'Ris', p2: 'SA', group: 'Delulu_404 vs saatvik_2010' },
+  { id: 2, p1: 'Ris', p2: 'SA', group: 'Delulu_404 vs saatvik_2010' },
+  { id: 3, p1: 'Ris', p2: 'SA', group: 'Delulu_404 vs saatvik_2010' },
+  { id: 4, p1: 'SA', p2: 'SU', group: 'saatvik_2010 vs Switch_bot' },
+  { id: 5, p1: 'SA', p2: 'SU', group: 'saatvik_2010 vs Switch_bot' },
+  { id: 6, p1: 'SA', p2: 'SU', group: 'saatvik_2010 vs Switch_bot' },
+  { id: 7, p1: 'SU', p2: 'Ris', group: 'Switch_bot vs Delulu_404' },
+  { id: 8, p1: 'SU', p2: 'Ris', group: 'Switch_bot vs Delulu_404' },
+  { id: 9, p1: 'SU', p2: 'Ris', group: 'Switch_bot vs Delulu_404' },
+];
+
+const FINAL_MATCHES = [
+  { id: 'F1', label: 'Final M1' },
+  { id: 'F2', label: 'Final M2' },
+  { id: 'F3', label: 'Final M3' },
+];
+
+// ============================================================
+// STATE
+// ============================================================
+function loadState() {
+  try {
+    const s = localStorage.getItem('fifa_tracker_v2');
+    if (s) return JSON.parse(s);
+  } catch(e) {}
+  return {
+    results: {}, // matchId -> { s1: number, s2: number }
+    finalResults: {}, // 'F1'/'F2'/'F3' -> { s1, s2 }
+  };
+}
+
+function saveState(state) {
+  try {
+    localStorage.setItem('fifa_tracker_v2', JSON.stringify(state));
+  } catch(e) {}
+}
+
+let state = loadState();
+
+// ============================================================
+// COMPUTED
+// ============================================================
+function getPlayer(id) { return PLAYERS.find(p => p.id === id); }
+
+function computeStandings() {
+  const stats = {};
+  PLAYERS.forEach(p => {
+    stats[p.id] = { mp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 };
+  });
+
+  MATCH_SCHEDULE.forEach(m => {
+    const r = state.results[m.id];
+    if (!r) return;
+    const s1 = r.s1, s2 = r.s2;
+    stats[m.p1].mp++; stats[m.p1].gf += s1; stats[m.p1].ga += s2;
+    stats[m.p2].mp++; stats[m.p2].gf += s2; stats[m.p2].ga += s1;
+    if (s1 > s2) { stats[m.p1].w++; stats[m.p1].pts += 3; stats[m.p2].l++; }
+    else if (s2 > s1) { stats[m.p2].w++; stats[m.p2].pts += 3; stats[m.p1].l++; }
+    else { stats[m.p1].d++; stats[m.p1].pts++; stats[m.p2].d++; stats[m.p2].pts++; }
+  });
+
+  return PLAYERS.map(p => ({ ...p, ...stats[p.id], gd: stats[p.id].gf - stats[p.id].ga }))
+    .sort((a, b) => {
+      if (b.pts !== a.pts) return b.pts - a.pts;
+      if (b.gd !== a.gd) return b.gd - a.gd;
+      if (b.gf !== a.gf) return b.gf - a.gf;
+      return 0;
+    });
+}
+
+function playedCount() {
+  return MATCH_SCHEDULE.filter(m => state.results[m.id] !== undefined).length;
+}
+
+function getFinalists(standings) {
+  return [standings[0], standings[1]];
+}
+
+function computeFinalSeries(finalists) {
+  if (!finalists[0] || !finalists[1]) return { winsA: 0, winsB: 0 };
+  let winsA = 0, winsB = 0;
+  FINAL_MATCHES.forEach(fm => {
+    const r = state.finalResults[fm.id];
+    if (!r) return;
+    if (r.s1 > r.s2) winsA++;
+    else if (r.s2 > r.s1) winsB++;
+  });
+  return { winsA, winsB };
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderAll() {
+  const standings = computeStandings();
+  const played = playedCount();
+  const pct = Math.round((played / 9) * 100);
+
+  // Progress
+  document.getElementById('match-progress-pill').textContent = `${played} / 9 Matches`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  if (played === 9) {
+    document.getElementById('live-status').textContent = 'Group Stage Complete';
+  }
+
+  renderStandings(standings);
+  renderMatches();
+  renderEntry();
+  renderFinal(standings);
+}
+
+function renderStandings(standings) {
+  const grid = document.getElementById('standings-grid');
+  const posClasses = ['p1', 'p2', 'p3'];
+  const rowClasses = ['first', 'second', ''];
+
+  grid.innerHTML = standings.map((p, i) => {
+    const gdClass = p.gd > 0 ? 'pos' : p.gd < 0 ? 'neg' : '';
+    const gdStr = p.gd > 0 ? `+${p.gd}` : `${p.gd}`;
+    const qualify = i < 2 ? `<span class="qualify-badge">FINAL</span>` : '';
+    return `
+      <div class="standing-row ${rowClasses[i]}">
+        <div class="pos-badge ${posClasses[i]}">${i + 1}</div>
+        <div class="player-cell">
+          <span class="player-avatar ${p.avatarClass}">${p.id}</span>
+          <span class="player-name">${p.name}${qualify}</span>
+        </div>
+        <div class="stat-cell stat-mp">${p.mp}</div>
+        <div class="stat-cell stat-w">${p.w}</div>
+        <div class="stat-cell stat-d">${p.d}</div>
+        <div class="stat-cell stat-l">${p.l}</div>
+        <div class="stat-cell stat-gf">${p.gf}</div>
+        <div class="stat-cell stat-ga">${p.ga}</div>
+        <div class="stat-cell gd ${gdClass}">${gdStr}</div>
+        <div class="stat-cell pts">${p.pts}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderMatches() {
+  const grid = document.getElementById('matches-grid');
+  let currentGroup = '';
+  let html = '';
+
+  MATCH_SCHEDULE.forEach(m => {
+    const r = state.results[m.id];
+    const p1 = getPlayer(m.p1);
+    const p2 = getPlayer(m.p2);
+    const played = r !== undefined;
+
+    if (m.group !== currentGroup) {
+      currentGroup = m.group;
+      html += `<div class="match-group-label">${m.group}</div>`;
+    }
+
+    let scoreHtml, winnerHtml;
+    if (played) {
+      const w = r.s1 > r.s2 ? p1 : r.s2 > r.s1 ? p2 : null;
+      scoreHtml = `<div class="match-score"><span class="score-num">${r.s1}</span><span class="score-sep">—</span><span class="score-num">${r.s2}</span></div>`;
+      winnerHtml = w
+        ? `<span class="match-winner-badge ${w.chipClass}">${w.name}</span>`
+        : `<span class="match-winner-badge winner-draw">Draw</span>`;
+    } else {
+      scoreHtml = `<div class="match-score pending">vs</div>`;
+      winnerHtml = `<span class="winner-pending">—</span>`;
+    }
+
+    html += `
+      <div class="match-card ${played ? 'played' : 'upcoming'}">
+        <div class="match-num">M${m.id}</div>
+        <div class="match-player">
+          <span class="player-avatar ${p1.avatarClass}">${p1.id}</span>
+          ${p1.name}
+        </div>
+        ${scoreHtml}
+        <div class="match-player right">
+          ${p2.name}
+          <span class="player-avatar ${p2.avatarClass}">${p2.id}</span>
+        </div>
+        ${winnerHtml}
+      </div>`;
+  });
+
+  grid.innerHTML = html;
+}
+
+function renderEntry() {
+  const panel = document.getElementById('entry-panel');
+  let html = '';
+  let currentGroup = '';
+
+  MATCH_SCHEDULE.forEach(m => {
+    const r = state.results[m.id];
+    const p1 = getPlayer(m.p1);
+    const p2 = getPlayer(m.p2);
+    const v1 = r !== undefined ? r.s1 : '';
+    const v2 = r !== undefined ? r.s2 : '';
+
+    if (m.group !== currentGroup) {
+      currentGroup = m.group;
+      html += `<div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--green);letter-spacing:2px;text-transform:uppercase;padding:.75rem 0 .25rem;">${m.group}</div>`;
+    }
+
+    html += `
+      <div class="input-row">
+        <div class="input-label">M${m.id}</div>
+        <div class="input-player">
+          <span class="player-avatar ${p1.avatarClass}" style="width:24px;height:24px;font-size:12px">${p1.id}</span>
+          ${p1.name}
+        </div>
+        <input type="number" class="score-input" id="s1_${m.id}" value="${v1}" min="0" max="99" placeholder="0" oninput="onScoreChange(${m.id})">
+        <div class="score-vs">—</div>
+        <input type="number" class="score-input" id="s2_${m.id}" value="${v2}" min="0" max="99" placeholder="0" oninput="onScoreChange(${m.id})">
+        <div class="input-player" style="justify-content:flex-end">
+          ${p2.name}
+          <span class="player-avatar ${p2.avatarClass}" style="width:24px;height:24px;font-size:12px">${p2.id}</span>
+        </div>
+      </div>`;
+  });
+
+  html += `<div class="input-actions">
+    <button class="btn btn-green" onclick="saveAllScores()">Save All Results</button>
+    <button class="btn btn-outline" onclick="clearUnplayed()">Clear Unplayed</button>
+  </div>`;
+
+  panel.innerHTML = html;
+}
+
+function renderFinal(standings) {
+  const section = document.getElementById('final-section');
+  const allPlayed = playedCount() === 9;
+
+  if (!allPlayed) {
+    section.innerHTML = `
+      <div style="background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center;">
+        <div style="font-size:32px;margin-bottom:.75rem">⏳</div>
+        <div style="font-weight:500;margin-bottom:6px">Awaiting Group Stage</div>
+        <div style="font-size:12px;color:var(--text-muted);font-family:'DM Mono',monospace">${9 - playedCount()} matches remaining before Grand Final</div>
+      </div>`;
+    return;
+  }
+
+  const finalists = getFinalists(standings);
+  const fA = finalists[0];
+  const fB = finalists[1];
+  const series = computeFinalSeries(finalists);
+  const champion = series.winsA >= 2 ? fA : series.winsB >= 2 ? fB : null;
+
+  let finalMatchesHtml = FINAL_MATCHES.map(fm => {
+    const r = state.finalResults[fm.id];
+    const played = r !== undefined;
+    let scoreStr = played ? `${r.s1} — ${r.s2}` : '— vs —';
+    let winnerStr = '—';
+    let winnerClass = '';
+    if (played) {
+      if (r.s1 > r.s2) { winnerStr = fA.name; winnerClass = fA.chipClass; }
+      else if (r.s2 > r.s1) { winnerStr = fB.name; winnerClass = fB.chipClass; }
+      else { winnerStr = 'Draw'; winnerClass = 'winner-draw'; }
+    }
+
+    const dot1 = series.winsA > 0 && (fm.id === 'F1' && r && r.s1 > r.s2) ? `<span class="series-dot won-a"></span>` : (fm.id === 'F2' && r && r.s1 > r.s2 ? `<span class="series-dot won-a"></span>` : (fm.id === 'F3' && r && r.s1 > r.s2 ? `<span class="series-dot won-a"></span>` : ''));
+
+    return `
+      <div class="final-match-row">
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim)">${fm.label}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:13px">${scoreStr}</div>
+        <div><span class="match-winner-badge ${winnerClass}" style="font-size:11px">${winnerStr}</span></div>
+        <div style="display:flex;gap:4px;align-items:center">
+          <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-muted)">${series.winsA} – ${series.winsB}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  let finalEntryHtml = FINAL_MATCHES.map(fm => {
+    const r = state.finalResults[fm.id];
+    const v1 = r !== undefined ? r.s1 : '';
+    const v2 = r !== undefined ? r.s2 : '';
+    return `
+      <div class="input-row" style="grid-template-columns:70px 1fr auto 1fr auto">
+        <div class="input-label">${fm.label}</div>
+        <div class="input-player"><span class="player-avatar ${fA.avatarClass}" style="width:22px;height:22px;font-size:11px">${fA.id}</span>${fA.name}</div>
+        <input type="number" class="score-input" id="fs1_${fm.id}" value="${v1}" min="0" max="99" placeholder="0">
+        <input type="number" class="score-input" id="fs2_${fm.id}" value="${v2}" min="0" max="99" placeholder="0">
+        <div class="input-player" style="justify-content:flex-end">${fB.name}<span class="player-avatar ${fB.avatarClass}" style="width:22px;height:22px;font-size:11px">${fB.id}</span></div>
+      </div>`;
+  }).join('');
+
+  const championHtml = champion ? `
+    <div class="champion-banner">
+      <div class="trophy">🏆</div>
+      <div class="champion-text">
+        <h3>Champion: ${champion.name}</h3>
+        <p>Won the Grand Final ${series.winsA >= 2 ? series.winsA + '–' + series.winsB : series.winsB + '–' + series.winsA}</p>
+      </div>
+    </div>` : '';
+
+  section.innerHTML = `
+    <div class="final-bracket">
+      <div class="final-header">
+        <span class="final-title">Grand Final — Best of 3</span>
+        <span class="pill" style="border-color:rgba(255,215,0,0.3);color:var(--gold)">Series ${series.winsA} – ${series.winsB}</span>
+      </div>
+      <div class="final-finalists">
+        <div class="finalist-chip"><span class="player-avatar ${fA.avatarClass}" style="width:26px;height:26px;font-size:13px">${fA.id}</span>${fA.name}</div>
+        <span class="finalist-vs">vs</span>
+        <div class="finalist-chip"><span class="player-avatar ${fB.avatarClass}" style="width:26px;height:26px;font-size:13px">${fB.id}</span>${fB.name}</div>
+      </div>
+      ${championHtml}
+      <div class="final-matches">${finalMatchesHtml}</div>
+      <div style="padding:0 1.5rem 1.5rem">
+        <div style="font-size:11px;font-family:'DM Mono',monospace;color:var(--text-dim);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:1px">Enter Final Scores</div>
+        <div style="background:var(--dark3);border:1px solid var(--border);border-radius:8px;padding:1rem">
+          ${finalEntryHtml}
+          <div class="input-actions">
+            <button class="btn btn-green" onclick="saveFinalScores()">Save Final Results</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function onScoreChange(matchId) {
+  // live preview — do nothing on each keystroke, save on btn
+}
+
+function saveAllScores() {
+  let saved = 0;
+  MATCH_SCHEDULE.forEach(m => {
+    const i1 = document.getElementById(`s1_${m.id}`);
+    const i2 = document.getElementById(`s2_${m.id}`);
+    if (!i1 || !i2) return;
+    const v1 = i1.value.trim();
+    const v2 = i2.value.trim();
+    if (v1 !== '' && v2 !== '') {
+      state.results[m.id] = { s1: parseInt(v1), s2: parseInt(v2) };
+      saved++;
+    }
+  });
+  saveState(state);
+  renderAll();
+  showToast(`${saved} results saved`);
+}
+
+function clearUnplayed() {
+  // clears only unplayed (no result yet) inputs
+  MATCH_SCHEDULE.forEach(m => {
+    if (!state.results[m.id]) {
+      const i1 = document.getElementById(`s1_${m.id}`);
+      const i2 = document.getElementById(`s2_${m.id}`);
+      if (i1) i1.value = '';
+      if (i2) i2.value = '';
+    }
+  });
+  showToast('Cleared unplayed inputs');
+}
+
+function saveFinalScores() {
+  FINAL_MATCHES.forEach(fm => {
+    const i1 = document.getElementById(`fs1_${fm.id}`);
+    const i2 = document.getElementById(`fs2_${fm.id}`);
+    if (!i1 || !i2) return;
+    const v1 = i1.value.trim();
+    const v2 = i2.value.trim();
+    if (v1 !== '' && v2 !== '') {
+      state.finalResults[fm.id] = { s1: parseInt(v1), s2: parseInt(v2) };
+    }
+  });
+  saveState(state);
+  renderAll();
+  showToast('Final results saved');
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function confirmReset() {
+  document.getElementById('confirm-overlay').classList.add('show');
+}
+
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('show');
+}
+
+function doReset() {
+  state = { results: {}, finalResults: {} };
+  saveState(state);
+  closeConfirm();
+  renderAll();
+  showToast('Tournament reset');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = '✓ ' + msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderAll();
+</script>
+</body>
+</html>
